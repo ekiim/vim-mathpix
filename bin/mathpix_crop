@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# vim: set ft=sh:
+HELP="Mathpix Crop and Convert API Tool Help and Usage
+
+First Argument should be 'text' for text conversion, 'latex' or empty for 
+equation conversion.
+
+Select the range of the screen you wish to use as your source, after conversion
+you'll recieve on STDERR the actuall 'Mathpix' Json Response to the request and 
+if successfull it will try to access and put to STDOUT the corresponding property
+deppending on the selected mode of conversion.
+
+Enviroment Variables Required
+    MATHPIX_ID
+    MATHPIX_KEY
+"
+
+mode=${1:-latex}
+[[ "$mode" = 'latex' ]] || [[ "$mode" = "text" ]] || echo "$HELP" >&2 && exit 1 
+image_file=/tmp/screenshot
+scrot -s "${image_file}" || exit 1
+image=$(base64 -w 0 "${image_file}" )
+response=$(curl \
+    https://api.mathpix.com/v3/${mode} \
+    -X POST \
+    -H "app_id: ${MATHPIX_ID}" \
+    -H "app_key: ${MATHPIX_KEY}" \
+    -H "Content-Type: application/json" \
+    --data "{\"src\":\"data:image/jpeg;base64,'$image'\"}" \
+    2>/dev/null)
+echo $response 2>/dev/null
+echo -e "$(echo $response | jq .$mode | sed -e 's/^"//g;s/"$//g' )"
