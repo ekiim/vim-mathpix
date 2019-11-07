@@ -7,6 +7,11 @@ repository, I wrote a script that uses `scrot`, `curl`, and `jq`, to submit a `P
 request to the _Mathpix_ API, in order to convert the selected image in to \Latex, or
 regular text depending on the argument.
 
+## Usage
+
+Execute the command `Img2Latex` or `Img2Text` and it will insert on your current line, 
+text generated from the image you crop on your screen.
+
 ## Install 
 
 Make sure you have installed, `curl`, `jq` (like `sed` but for `json`), and `scrot`.
