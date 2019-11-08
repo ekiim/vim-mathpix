@@ -34,3 +34,7 @@ export MATHPIX_GROUP="group_id"
 export MATHPIX_ID="app_id"
 export MATHPIX_KEY="app_key"
 ```
+
+## Example 
+
+![Example of Usage](example/test.gif)
