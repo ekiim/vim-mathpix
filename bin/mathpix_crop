@@ -18,15 +18,14 @@ Enviroment Variables Required
 mode=${1:-latex}
 [[ "$mode" = 'latex' ]] || [[ "$mode" = "text" ]] || (echo "$HELP" >&2 && exit 1)
 image_file=/tmp/screenshot
-rm -r "$image_file"
+rm -f "$image_file"
 scrot -s "${image_file}"
-image=$(base64 -w 0 "${image_file}" )
-response=$(curl \
+image=$(base64 -w 0 "${image_file}")
+curl -q \
     https://api.mathpix.com/v3/${mode} \
     -X POST \
     -H "app_id: ${MATHPIX_ID}" \
     -H "app_key: ${MATHPIX_KEY}" \
     -H "Content-Type: application/json" \
-    --data "{\"src\":\"data:image/jpeg;base64,'$image'\"}")
-echo "$response" >&2
-echo -e "$(echo $response | jq -r .$mode)"
+    --data "{\"src\":\"data:image/jpeg;base64,'$image'\"}" \
+    2> /dev/null | jq -r .$mode
