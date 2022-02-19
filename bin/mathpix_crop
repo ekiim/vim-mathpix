@@ -29,4 +29,4 @@ response=$(curl \
     -H "Content-Type: application/json" \
     --data "{\"src\":\"data:image/jpeg;base64,'$image'\"}")
 echo "$response" >&2
-echo -e "$(echo $response | jq .$mode | sed -e 's/^"//g;s/"$//g' )"
+echo -e "$(echo $response | jq -r .$mode)"
