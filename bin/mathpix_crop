@@ -14,13 +14,26 @@ Enviroment Variables Required
     MATHPIX_ID
     MATHPIX_KEY
 "
+SCREENSHOT_PROG=""
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    [[ -f "$(which scrot)" ]] && SCREENSHOT_PROG="scrot -s" || \
+        echo "scrot not install." exit 1
+    BASE64_PROG="base64 -w 0"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    [[ -f "$(which screencapture)" ]] && SCREENSHOT_PROG="screencapture -i"
+    BASE64_PROG="base64 -i"
+else
+    echo "$OSTYPE not supported."
+    exit 1
+fi
 
 mode=${1:-latex}
 [[ "$mode" = 'latex' ]] || [[ "$mode" = "text" ]] || (echo "$HELP" >&2 && exit 1)
 image_file=/tmp/screenshot
 rm -f "$image_file"
-scrot -s "${image_file}"
-image=$(base64 -w 0 "${image_file}")
+${SCREENSHOT_PROG} "${image_file}"
+image=$(${BASE64_PROG} "${image_file}")
 curl -q \
     https://api.mathpix.com/v3/${mode} \
     -X POST \
