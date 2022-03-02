@@ -27,6 +27,7 @@ else
     echo "$OSTYPE not supported."
     exit 1
 fi
+[[ ! -f $(which jq) ]] && echo "No jq found." && exit 1
 
 mode=${1:-latex}
 [[ "$mode" = 'latex' ]] || [[ "$mode" = "text" ]] || (echo "$HELP" >&2 && exit 1)
