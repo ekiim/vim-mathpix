@@ -41,5 +41,5 @@ curl -q \
     -H "app_id: ${MATHPIX_ID}" \
     -H "app_key: ${MATHPIX_KEY}" \
     -H "Content-Type: application/json" \
-    --data "{\"src\":\"data:image/jpeg;base64,'$image'\"}" \
-    2> /dev/null | jq -r .$mode
+    --data "{\"src\":\"data:image/jpeg;base64,'$image'\", \"math_inline_delimiters\": [\"$\", \"$\"], \"math_display_delimiters\": [\"$$\", \"$$\"] }" \
+    2> /dev/null | jq -r .${mode}
